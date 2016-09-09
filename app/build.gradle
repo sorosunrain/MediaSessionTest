@@ -1,17 +1,44 @@
 apply plugin: 'com.android.application'
 
+def ext = rootProject.ext.configuration
+def lib = rootProject.ext.libraries
+
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    compileSdkVersion ext.compileSdkVersion
+    buildToolsVersion ext.buildToolsVersion
     defaultConfig {
         applicationId "com.sunrain.mediasessiontest"
-        minSdkVersion 15
-        targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion ext.minSdkVersion
+        targetSdkVersion ext.targetSdkVersion
+        versionCode ext.versionCode
+        versionName ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release {
+//            storeFile file(project.property("MyProject.signing") + ".keystore")
+//            storePassword "mypassword"
+//            keyAlias "KeyAlias"
+//            keyPassword "mypassword"
+        }
+    }
     buildTypes {
+
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                def outputFile = output.outputFile
+                def fileName
+                if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                    if (variant.buildType.name.equals('release')) {
+                        fileName = "Fui_Music_V${defaultConfig.versionName}.apk"
+                    } else if (variant.buildType.name.equals('debug')) {
+                        fileName = "Fui_Music_Debug_V${defaultConfig.versionName}.apk"
+                    }
+                    output.outputFile = new File(outputFile.parent, fileName)
+                }
+            }
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -24,10 +51,13 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:24.2.0'
+
     testCompile 'junit:junit:4.12'
 
 
-    compile 'com.facebook.fresco:fresco:0.11.0+'
+    compile lib["support-v4"]
+    compile lib["support-v7"]
+
+    compile lib["fresco"]
 
 }

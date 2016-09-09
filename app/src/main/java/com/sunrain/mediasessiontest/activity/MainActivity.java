@@ -1,15 +1,15 @@
-package com.sunrain.mediasessiontest.activitys;
+package com.sunrain.mediasessiontest.activity;
 
 import android.os.Bundle;
 
 import com.sunrain.mediasessiontest.R;
-import com.sunrain.mediasessiontest.activitys.base.BaseActivity;
+import com.sunrain.mediasessiontest.activity.base.BaseActivity;
 
 public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        super.setContentView(R.layout.activity_main);
     }
 }

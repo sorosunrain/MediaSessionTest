@@ -1,4 +1,4 @@
-package com.sunrain.mediasessiontest.activitys;
+package com.sunrain.mediasessiontest.activity.base;
 
 import android.app.Application;
 
@@ -6,7 +6,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 
 
 
-public class MyApplication extends Application {
+public class AppApplication extends Application {
 
     @Override
     public void onCreate() {
