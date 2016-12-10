@@ -15,12 +15,12 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
-        release {
-//            storeFile file(project.property("MyProject.signing") + ".keystore")
-//            storePassword "mypassword"
-//            keyAlias "KeyAlias"
-//            keyPassword "mypassword"
-        }
+//        applicationName {
+//            keyAlias 'applicationName'
+//            keyPassword 'password'
+//            storeFile file('../key/applicationName.jks')
+//            storePassword 'anotherPassword'
+//        }
     }
     buildTypes {
 
@@ -52,6 +52,15 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    testCompile ('org.powermock:powermock-api-mockito:1.6.2') {
+        exclude module: 'hamcrest-core'
+        exclude module: 'objenesis'
+    }
+    testCompile ('org.powermock:powermock-module-junit4:1.6.2') {
+        exclude module: 'hamcrest-core'
+        exclude module: 'objenesis'
+    }
+
     testCompile 'junit:junit:4.12'
 
 
@@ -59,5 +68,7 @@ dependencies {
     compile lib["support-v7"]
 
     compile lib["fresco"]
+
+    compile lib["nohttp"]
 
 }

@@ -1,13 +1,17 @@
 package com.sunrain.mediaplayer;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 
+import com.sunrain.Constant;
 import com.sunrain.mediaplayer.listener.SRMediaPlayerClientListener;
 import com.sunrain.mediaplayer.service.SRMusicService;
 
@@ -20,8 +24,6 @@ public class SRMediaPlayerClient {
 
     private static SRMediaPlayerClient _client;
 
-    private SRMusicService.SRBinder mBinder;
-
     private Context mContext;
     private int mCurrentFlag = FLAG_RESTART;
 
@@ -32,7 +34,7 @@ public class SRMediaPlayerClient {
     private SRMediaPlayerClientListener mListener;
 
 
-    public void init(){
+    public void initMesiaSession(){
 
         mMediaSession = new MediaSessionCompat(mContext,TAG);
         mTransportControls = mBinder.getTransportControls(mContext,mMediaSession.getSessionToken());
@@ -46,7 +48,18 @@ public class SRMediaPlayerClient {
 
 
 
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
 
+            if(Constant.ACTION_STARTED.equals(intent.getAction())){
+
+
+
+            }
+
+        }
+    };
 
 
 
@@ -73,23 +86,14 @@ public class SRMediaPlayerClient {
     }
 
     public void startService(){
+
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mReceiver,new IntentFilter(Constant.ACTION_STARTED));
+
+        initMesiaSession();
+
         Intent intent = new Intent(mContext, SRMusicService.class);
         mContext.startService(intent);
     }
 
-
-
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mBinder = (SRMusicService.SRBinder) service;
-            init();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    };
 
 }

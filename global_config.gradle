@@ -67,6 +67,7 @@ ext {
 
 
 
+            "nohttp"                        : 'com.yolanda.nohttp:nohttp:1.0.7',
             "okhttp"                        : 'com.squareup.okhttp3:okhttp:3.4.1',
             "okhttp3_logging"               : 'com.squareup.okhttp3:logging-interceptor:3.4.1',
             "retrofit"                      : 'com.squareup.retrofit2:retrofit:2.1.0',

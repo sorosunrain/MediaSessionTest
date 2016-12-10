@@ -1,17 +1,16 @@
 package com.sunrain.mediaplayer.service;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaBrowserServiceCompat;
-import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
+
+import com.sunrain.Constant;
 
 import java.util.List;
 
@@ -19,9 +18,6 @@ public class SRMusicService extends MediaBrowserServiceCompat {
 
     private static final String TAG = "SRMusicService";
     public static final String BROWSER_ROOT_ID = "_MusicService_";
-
-    private SRBinder mBinder;
-
 
     @Override
     public void onCreate() {
@@ -33,11 +29,15 @@ public class SRMusicService extends MediaBrowserServiceCompat {
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        Log.e(TAG, "onBind");
-        if (mBinder == null)
-            mBinder = new SRBinder();
-        return mBinder;
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        MediaSessionCompat.Token token = intent.getParcelableExtra("token");
+
+        setSessionToken(token);
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(Constant.ACTION_STARTED));
+
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Nullable
@@ -52,23 +52,6 @@ public class SRMusicService extends MediaBrowserServiceCompat {
         Log.w(TAG, "___onLoadChildren");
         result.detach();
     }
-
-
-    public final class SRBinder extends Binder {
-
-        public MediaControllerCompat.TransportControls getTransportControls(Context mContext, MediaSessionCompat.Token token) {
-
-            try {
-                setSessionToken(token);
-                MediaControllerCompat controller = new MediaControllerCompat(mContext, token);
-                return controller.getTransportControls();
-            } catch (Exception e) {
-            }
-
-            return null;
-        }
-    }
-
 
 
 
